@@ -1,0 +1,163 @@
+openapi: "3.0.3"
+info:
+  title: "Kotlin backend - SINWO"
+  description: "API, które pozwala na składanie zamówień, pobieranie informacji o nich i zarządzanie klientami"
+  version: "0.0.1"
+servers:
+  - url: "http://127.0.0.1:2137"
+paths:
+  /customer:
+    post:
+      description: "Tworzy nowego klienta"
+      requestBody:
+        description: "Obiekt JSON zawierający informację o kliencie"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+      responses:
+        "201":
+          description: "Created"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Klient został dodany pomyślnie"
+  /customer/{id}:
+    get:
+      description: "Zwraca klienta na podstawie podanego ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Customer"
+  /customer/{id?}:
+    delete:
+      description: "Usuwa klienta z bazy"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Customer"
+  /order:
+    get:
+      description: "Zwraca listę zamówień"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Order"
+  /order/{id}:
+    get:
+      description: "Zwraca zamówienie na podstawie podanego ID"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Order"
+  /order/{id}/total:
+    get:
+      description: "Zwraca łączną wartość zamówienia"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "float"
+  /order/new:
+    post:
+      description: "Tworzy nowe zamówienie"
+      requestBody:
+        description: "Obiekt JSON zawierający informację o zamówieniu"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderItem"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Order"
+components:
+  schemas:
+    Customer:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        firstName:
+          type: "string"
+        lastName:
+          type: "string"
+        email:
+          type: "string"
+    Order:
+      type: "object"
+      properties:
+        number:
+          type: "string"
+        contents:
+          type: "object"
+          properties:
+            OrderItem:
+              type: "object"
+              properties:
+                item:
+                  type: "string"
+                amount:
+                  type: "integer"
+                  format: "int32"
+                price:
+                  type: "number"
+                  format: "double"
+    OrderItem:
+      type: "object"
+      properties:
+        item:
+          type: "string"
+        amount:
+          type: "integer"
+          format: "int32"
+        price:
+          type: "number"
+          format: "double"
