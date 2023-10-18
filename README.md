@@ -6,13 +6,13 @@ This project work as an example of API that can be written in Kotlin. It allows 
 Clone the project
 
 ```bash
-  git clone https://github.com/Seba0855/sinwo2022.git
+  git clone https://github.com/Seba0855/sklep_backend.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd sinwo2022
+  cd sklep_backend
 ```
 
 Run the project
