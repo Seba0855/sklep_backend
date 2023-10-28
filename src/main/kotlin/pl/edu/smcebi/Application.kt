@@ -19,7 +19,4 @@ fun Application.module() {
         anyHost()
         allowHeader(HttpHeaders.ContentType)
     }
-    configureSerialization()
-    configureSecurity()
-    configureRouting()
 }
