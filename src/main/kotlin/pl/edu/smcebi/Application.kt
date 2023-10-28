@@ -5,6 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.cors.routing.*
+import pl.edu.smcebi.plugins.configureSerialization
 
 fun main() {
     embeddedServer(Netty, port = 2137, host = "0.0.0.0", module = Application::module)
@@ -16,4 +17,5 @@ fun Application.module() {
         anyHost()
         allowHeader(HttpHeaders.ContentType)
     }
+    configureSerialization()
 }
