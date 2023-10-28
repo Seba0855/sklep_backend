@@ -5,6 +5,7 @@ import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.cors.routing.*
+import pl.edu.smcebi.plugins.configureRouting
 import pl.edu.smcebi.plugins.configureSerialization
 
 fun main() {
@@ -18,4 +19,5 @@ fun Application.module() {
         allowHeader(HttpHeaders.ContentType)
     }
     configureSerialization()
+    configureRouting()
 }
