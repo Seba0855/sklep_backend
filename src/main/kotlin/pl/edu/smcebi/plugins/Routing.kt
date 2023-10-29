@@ -8,6 +8,6 @@ fun Application.configureRouting() {
     install(AutoHeadResponse)
 
     routing {
-        // our endpoint routes should go there
+        listOrdersRoute()
     }
 }
