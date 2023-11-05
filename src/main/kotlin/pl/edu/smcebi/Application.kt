@@ -9,7 +9,7 @@ import pl.edu.smcebi.plugins.configureRouting
 import pl.edu.smcebi.plugins.configureSerialization
 
 fun main() {
-    embeddedServer(Netty, port = 2137, host = "0.0.0.0", module = Application::module)
+    embeddedServer(Netty, port = 9090, host = "0.0.0.0", module = Application::module)
         .start(wait = true)
 }
 
