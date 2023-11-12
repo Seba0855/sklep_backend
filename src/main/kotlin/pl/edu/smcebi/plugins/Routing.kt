@@ -4,6 +4,7 @@ import io.ktor.server.application.*
 import io.ktor.server.plugins.autohead.*
 import io.ktor.server.routing.*
 import pl.edu.smcebi.routes.createNewOrder
+import pl.edu.smcebi.routes.getOrderRoute
 import pl.edu.smcebi.routes.listOrdersRoute
 
 fun Application.configureRouting() {
@@ -12,5 +13,6 @@ fun Application.configureRouting() {
     routing {
         listOrdersRoute()
         createNewOrder()
+        getOrderRoute()
     }
 }
