@@ -6,6 +6,7 @@ import io.ktor.server.routing.*
 import pl.edu.smcebi.routes.createNewOrder
 import pl.edu.smcebi.routes.getOrderRoute
 import pl.edu.smcebi.routes.listOrdersRoute
+import pl.edu.smcebi.routes.totalizeOrderRoute
 
 fun Application.configureRouting() {
     install(AutoHeadResponse)
@@ -14,5 +15,6 @@ fun Application.configureRouting() {
         listOrdersRoute()
         createNewOrder()
         getOrderRoute()
+        totalizeOrderRoute()
     }
 }
