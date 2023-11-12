@@ -9,10 +9,7 @@ fun Application.configureRouting() {
     install(AutoHeadResponse)
 
     routing {
-        listOrdersRoute()
-        createNewOrder()
-        getOrderRoute()
-        totalizeOrderRoute()
+        orderRouting()
         customerRouting()
     }
 }
