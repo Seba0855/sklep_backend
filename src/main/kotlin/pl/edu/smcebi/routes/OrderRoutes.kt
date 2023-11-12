@@ -13,7 +13,18 @@ import pl.edu.smcebi.models.OrderStatus
 import pl.edu.smcebi.models.orderStorage
 import java.util.*
 
-fun Route.listOrdersRoute() {
+/**
+ * Add here new routes
+ */
+fun Route.orderRouting() {
+    listOrdersRoute()
+    orderIdRoute()
+    orderStatusRoute()
+    totalizeOrderRoute()
+    createNewOrder()
+}
+
+private fun Route.listOrdersRoute() {
     get("/order") {
         if (orderStorage.isNotEmpty()) {
             call.respond(orderStorage)
@@ -21,7 +32,7 @@ fun Route.listOrdersRoute() {
     }
 }
 
-fun Route.orderIdRoute() {
+private fun Route.orderIdRoute() {
     route("/order/{id?}") {
         get {
             val id = call.parameters["id"] ?: return@get call.respondWithBadRequest()
@@ -34,7 +45,7 @@ fun Route.orderIdRoute() {
     }
 }
 
-fun Route.orderStatusRoute() {
+private fun Route.orderStatusRoute() {
     put("/order/{id?}/status") {
         val id = call.parameters["id"] ?: return@put call.respondWithBadRequest()
         val newStatus = call.receive<OrderStatus>()
@@ -53,7 +64,7 @@ fun Route.orderStatusRoute() {
     }
 }
 
-fun Route.totalizeOrderRoute() {
+private fun Route.totalizeOrderRoute() {
     get("/order/{id?}/total") {
         val id = call.parameters["id"] ?: return@get call.respondWithBadRequest()
         val order = orderStorage.find { it.number == id } ?: return@get call.respondText(
@@ -65,7 +76,7 @@ fun Route.totalizeOrderRoute() {
     }
 }
 
-fun Route.createNewOrder() {
+private fun Route.createNewOrder() {
     post("/order/new") {
         val orderItems = call.receive<List<OrderItem>>()
         val newOrder = orderItems.toNewOrder()
