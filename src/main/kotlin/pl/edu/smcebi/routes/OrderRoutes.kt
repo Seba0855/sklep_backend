@@ -9,6 +9,7 @@ import pl.edu.smcebi.extensions.getCurrentDate
 import pl.edu.smcebi.extensions.respondWithBadRequest
 import pl.edu.smcebi.models.Order
 import pl.edu.smcebi.models.OrderItem
+import pl.edu.smcebi.models.OrderStatus
 import pl.edu.smcebi.models.orderStorage
 import java.util.*
 
@@ -20,14 +21,35 @@ fun Route.listOrdersRoute() {
     }
 }
 
-fun Route.getOrderRoute() {
-    get("/order/{id?}") {
-        val id = call.parameters["id"] ?: return@get call.respondWithBadRequest()
-        val order = orderStorage.find { it.number == id } ?: return@get call.respondText(
+fun Route.orderIdRoute() {
+    route("/order/{id?}") {
+        get {
+            val id = call.parameters["id"] ?: return@get call.respondWithBadRequest()
+            val order = orderStorage.find { it.number == id } ?: return@get call.respondText(
+                "Nie znaleziono zamówienia o podanym ID",
+                status = HttpStatusCode.NotFound
+            )
+            call.respond(order)
+        }
+    }
+}
+
+fun Route.orderStatusRoute() {
+    put("/order/{id?}/status") {
+        val id = call.parameters["id"] ?: return@put call.respondWithBadRequest()
+        val newStatus = call.receive<OrderStatus>()
+        val order = orderStorage.find { it.number == id } ?: return@put call.respondText(
             "Nie znaleziono zamówienia o podanym ID",
             status = HttpStatusCode.NotFound
         )
-        call.respond(order)
+        val updatedOrder = order.copy(status = newStatus)
+        orderStorage.apply {
+            val orderIndex = indexOf(order)
+            removeAt(orderIndex)
+            add(orderIndex, updatedOrder)
+        }
+
+        call.respond(updatedOrder)
     }
 }
 

@@ -11,8 +11,9 @@ fun Application.configureRouting() {
     routing {
         listOrdersRoute()
         createNewOrder()
-        getOrderRoute()
+        orderIdRoute()
         totalizeOrderRoute()
+        orderStatusRoute()
         customerRouting()
     }
 }
