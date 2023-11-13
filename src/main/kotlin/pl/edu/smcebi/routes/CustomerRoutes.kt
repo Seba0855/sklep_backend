@@ -10,6 +10,15 @@ import pl.edu.smcebi.models.customerStorage
 
 fun Route.customerRouting() {
     route("/customer") {
+
+        get {
+            if (customerStorage.isNotEmpty()) {
+                call.respond(customerStorage)
+            } else {
+                call.respondText("Brak klientów w bazie", status = HttpStatusCode.OK)
+            }
+        }
+
         post {
             val customer = call.receive<Customer>()
             customerStorage.add(customer)
