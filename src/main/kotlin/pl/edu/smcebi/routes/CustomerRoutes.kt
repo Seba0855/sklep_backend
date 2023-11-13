@@ -10,7 +10,6 @@ import pl.edu.smcebi.models.customerStorage
 
 fun Route.customerRouting() {
     route("/customer") {
-
         get {
             if (customerStorage.isNotEmpty()) {
                 call.respond(customerStorage)
@@ -18,7 +17,18 @@ fun Route.customerRouting() {
                 call.respondText("Brak klientów w bazie", status = HttpStatusCode.OK)
             }
         }
-
+        get("{id?}") {
+            val id = call.parameters["id"] ?: return@get call.respondText(
+                "Missing id",
+                status = HttpStatusCode.BadRequest
+            )
+            val customer =
+                customerStorage.find { it.id == id } ?: return@get call.respondText(
+                    "Brak klienta o ID $id",
+                    status = HttpStatusCode.NotFound
+                )
+            call.respond(customer)
+        }
         post {
             val customer = call.receive<Customer>()
             customerStorage.add(customer)
