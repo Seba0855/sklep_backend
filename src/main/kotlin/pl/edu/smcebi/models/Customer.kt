@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
  * @param firstName: Imię klienta
  * @param lastName: Nazwisko klienta
  * @param email: Adres email klienta
+ * @param deliveryAddress: adres klienta
  */
 @Serializable
 data class Customer(
