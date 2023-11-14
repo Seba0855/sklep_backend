@@ -17,7 +17,7 @@ data class Customer(
     val firstName: String,
     val lastName: String,
     val email: String,
-    var deliveryAddress: DeliveryAddress?
+    var deliveryAddress: DeliveryAddress? = null
 )
 
 val customerStorage = mutableListOf<Customer>()
