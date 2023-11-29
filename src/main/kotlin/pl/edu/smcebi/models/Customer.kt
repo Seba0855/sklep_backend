@@ -1,6 +1,7 @@
 package pl.edu.smcebi.models
 
 import kotlinx.serialization.Serializable
+import java.util.UUID
 
 /**
  * Klasa modelowa przechowująca dane o kliencie
@@ -13,7 +14,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Customer(
-    val id: String,
+    val id: String = UUID.randomUUID().toString(),
     val firstName: String,
     val lastName: String,
     val email: String,
