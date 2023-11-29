@@ -5,9 +5,16 @@ info:
   version: "0.0.1"
 servers:
   - url: "http://127.0.0.1:9090"
+tags:
+  - name: customer
+    description: Zbiór danych o klientach sklepu
+  - name: order
+    description: Zbiór danych o zamówieniu
 paths:
   /customer:
     post:
+      tags:
+        - customer
       description: "Tworzy nowego klienta"
       requestBody:
         description: "Obiekt JSON zawierający informację o kliencie"
@@ -28,6 +35,8 @@ paths:
                   value: "Klient został dodany pomyślnie"
   /customer/{id}:
     get:
+      tags:
+        - customer
       description: "Zwraca klienta na podstawie podanego ID"
       parameters:
         - name: "id"
@@ -44,6 +53,8 @@ paths:
                 $ref: "#/components/schemas/Customer"
   /customer/{id?}:
     delete:
+      tags:
+        - customer
       description: "Usuwa klienta z bazy"
       parameters:
         - name: "id"
@@ -60,6 +71,8 @@ paths:
                 $ref: "#/components/schemas/Customer"
   /order:
     get:
+      tags:
+        - order
       description: "Zwraca listę zamówień"
       responses:
         "200":
@@ -70,6 +83,8 @@ paths:
                 $ref: "#/components/schemas/Order"
   /order/{id}:
     get:
+      tags:
+        - order
       description: "Zwraca zamówienie na podstawie podanego ID"
       parameters:
         - name: "id"
@@ -86,6 +101,8 @@ paths:
                 $ref: "#/components/schemas/Order"
   /order/{id}/total:
     get:
+      tags:
+        - order
       description: "Zwraca łączną wartość zamówienia"
       parameters:
         - name: "id"
@@ -97,11 +114,35 @@ paths:
         "200":
           description: "OK"
           content:
-            '*/*':
+            'text/plain':
               schema:
-                type: "float"
+                type: "number"
+                format: "double"
+  /order/{id}/status:
+    put:
+      tags:
+        - order
+      description: "Aktualizuje status zamówienia"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        description: "Status zamówienia"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderStatus"
+      responses:
+        "200":
+          description: "OK"
   /order/new:
     post:
+      tags:
+        - order
       description: "Tworzy nowe zamówienie"
       requestBody:
         description: "Obiekt JSON zawierający informację o zamówieniu"
@@ -121,6 +162,11 @@ components:
   schemas:
     Customer:
       type: "object"
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
       properties:
         id:
           type: "integer"
@@ -131,27 +177,31 @@ components:
           type: "string"
         email:
           type: "string"
+        deliveryAddress:
+          type: "object"
+          $ref: "#/components/schemas/DeliveryAddress"
     Order:
       type: "object"
+      required:
+        - number
+        - contents
+        - status
       properties:
         number:
           type: "string"
         contents:
-          type: "object"
-          properties:
-            OrderItem:
-              type: "object"
-              properties:
-                item:
-                  type: "string"
-                amount:
-                  type: "integer"
-                  format: "int32"
-                price:
-                  type: "number"
-                  format: "double"
+          type: "array"
+          items:
+            $ref: "#/components/schemas/OrderItem"
+        status:
+          type: "string"
+          $ref: "#/components/schemas/OrderStatus"
     OrderItem:
       type: "object"
+      required:
+        - item
+        - amount
+        - price
       properties:
         item:
           type: "string"
@@ -161,3 +211,23 @@ components:
         price:
           type: "number"
           format: "double"
+    OrderStatus:
+      type: "string"
+      enum:
+        - "NEW"
+        - "PREPARATION"
+        - "CANCELLED"
+        - "DELIVERY"
+        - "DELIVERED"
+    DeliveryAddress:
+      properties:
+        city:
+          type: "string"
+        street:
+          type: "string"
+        streetNo:
+          type: "string"
+        postalCode:
+          type: "string"
+        phoneNumber:
+          type: "string"
